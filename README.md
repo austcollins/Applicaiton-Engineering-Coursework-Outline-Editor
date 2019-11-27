@@ -34,4 +34,4 @@ The text within your outline item can be styled using Bold, Italic, or Underline
 To do this:
 1. Select the outline item
 2. Highlight the text you want to style
-3. Use the <kbd>B</kbd>, <kbd>U</kbd>, <kbd>I</kbd> buttons in the toolbar apply/remove styles.
+3. Use the <kbd>B</kbd>, <kbd>U</kbd>, <kbd>I</kbd> buttons in the toolbar to apply/remove styles.
