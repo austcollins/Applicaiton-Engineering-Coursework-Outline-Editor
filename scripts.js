@@ -34,7 +34,7 @@ function keyManager(event) {
     return;
   }
 
-  // decide what to do when a key is pressed
+  // decide what to do when a key is pressed.
   if (event.keyCode === 13) { // enter pressed
     event.preventDefault();
     if (currentOutlineItem.innerText === '' && currentOutlineItem.dataset.level > 0 && !event.shiftKey) {
