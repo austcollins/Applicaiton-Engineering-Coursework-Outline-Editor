@@ -11,7 +11,7 @@ The application is designed to be as intuative as possible, but there are some s
 ### Creating a new outline item
 Press ENTER to create a new outline item below the one currently selected.
 
-### Moving up and down levels
+### Moving up and down levels
 There are two ways to move up and down levels:
 - Keyboard shortcuts
   1. Select the item you want to move.
