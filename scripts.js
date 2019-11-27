@@ -80,6 +80,7 @@ function newOutlineItem() {
   newOutlineItem.contentEditable = true;
   newOutlineItem.dataset.level = currentOutlineItem.dataset.level;
   newOutlineItem.style.marginLeft = 50*newOutlineItem.dataset.level+"px";
+  newOutlineItem.draggable=true;
   // insert newOutlineItem after currentOutlineItem
   currentOutlineItem.parentNode.insertBefore(newOutlineItem, currentOutlineItem.nextSibling);
 
