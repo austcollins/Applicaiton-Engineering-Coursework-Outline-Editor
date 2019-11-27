@@ -1,6 +1,32 @@
 body {
   background-color: #eee;
 }
+#notifications {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 300px;
+  z-index: 100;
+}
+#notifications .notification {
+  background-color: rgb(113,241,191);
+  margin-bottom: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+#notifications .notification span {
+  display: block;
+  width: calc(100% - 20px);
+  padding: 5px 10px;
+}
+#notifications .notification span.header{
+  background-color: rgb(62,176,131);
+  color: white;
+}
+[contenteditable] {
+    -webkit-user-select: text;
+    user-select: text; /* For safari compatability */
+}
 #outline-container {
   position: relative;
   width: 100%;
@@ -30,6 +56,9 @@ body {
   background-repeat: no-repeat;
   background-size: 15px;
   background-position: 10px 10px;
+}
+.outline-item.oi-drag-target {
+  margin-bottom: 30px;
 }
 .outline-item:focus {
   outline: none;

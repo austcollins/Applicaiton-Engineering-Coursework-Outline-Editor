@@ -6,20 +6,26 @@
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
-
+    <div id="notifications">
+    </div>
     <div id="outline-container">
       <figure id="toolbar">
-        <button>Italic</button>
-        <button>Bold</button>
-        <button>Underline</button>
-        <select name="level">
-          <option value="1">Level 1</option>
-          <option value="2">Level 2</option>
-          <option value="3">Level 3</option>
-          <option value="4">Level 4</option>
-          <option value="5">Level 5</option>
-          <option value="6">Level 6</option>
+        <button  style="font-style: italic;" onclick="document.execCommand('italic',false,null);" title="Italicize Highlighted Text">I</button>
+        <button style="font-weight: bold;" onclick="document.execCommand( 'bold',false,null);" title="Bold Highlighted Text">B</button>
+        <button style="text-decoration: underline;" onclick="document.execCommand( 'underline',false,null);">U</button>
+        <select id="level-selector" name="level">
+          <option value="0">Level 1</option>
+          <option value="1">Level 2</option>
+          <option value="2">Level 3</option>
+          <option value="3">Level 4</option>
+          <option value="4">Level 5</option>
+          <option value="5">Level 6</option>
         </select>
+        <span style="float: right;">
+          <button type="button" name="open">Open</button>
+          <button type="button" name="save">Save</button>
+          <button type="button" name="export">Export</button>
+        </span>
       </figure>
       <div id="outline-items">
         <span class="outline-item" id=default data-level="0" contentEditable=true draggable=true>Click here to get started...</span>
