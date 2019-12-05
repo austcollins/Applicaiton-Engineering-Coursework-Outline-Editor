@@ -1,32 +1,16 @@
-// returns selected outline item, returns null if none selected
-function getCurrentOutlineItem() {
-  let currentOutlineItems = document.getElementsByClassName('oi-selected');
-  let currentOutlineItem = null;
-  // make sure there's only one item selected
-  if (currentOutlineItems.length === 1) {
-    currentOutlineItem = currentOutlineItems[0];
-  } else {
-    for (elem of document.getElementsByClassName('oi-selected')) {
-      elem.classList.remove('oi-selected');
-    }
-  }
-  return currentOutlineItem;
-}
-
 // Listen for clicks, if outline item is clicked, save reference to that item
+var currentOutlineItem;
 function selectorManager(event) {
-  // get the selected item
-  let currentOutlineItem = getCurrentOutlineItem();
   // Unselect currentOutline item if clicked elsewhere,
   // unless selecting something in the toolbar
   if (currentOutlineItem && event.target.parentNode.id != "toolbar" && event.target.id != "toolbar") {
-    currentOutlineItem.classList.remove('oi-selected');
+    currentOutlineItem.classList.remove('selected');
     currentOutlineItem = '';
   }
   // if an outline-item is selected, select it
   if (event.target.classList.contains('outline-item')) {
     currentOutlineItem = event.target;
-    currentOutlineItem.classList.add('oi-selected');
+    currentOutlineItem.classList.add('selected');
     currentOutlineItem.addEventListener("keydown", keyManager);
     // update toolbar settings to new item
     document.getElementById("level-selector").value = currentOutlineItem.dataset.level;
@@ -35,6 +19,7 @@ function selectorManager(event) {
 document.addEventListener("click", selectorManager);
 
 // Clear the default outline item when first clicked
+currentOutlineItem = document.getElementById('default');
 document.getElementById('default').addEventListener("click", event => {
   event.target.id = '';
   event.target.innerText = '';
@@ -42,14 +27,14 @@ document.getElementById('default').addEventListener("click", event => {
 
 // handles what to do when a key is pressed while an outline-item is selected
 function keyManager(event) {
-  let currentOutlineItem = event.target;
   // decide what to do when a key is pressed.
   if (event.keyCode === 13) { // enter pressed
     event.preventDefault();
     // if enter is pressed on an empty outline item && item can be stepped down && user hasn't overidden, step down
     // this is designed to be like creating lists in microsoft word to be as intuitive as possible
     if (currentOutlineItem.innerText === '' && currentOutlineItem.dataset.level > 0 && !event.shiftKey) {
-      decreaseLevel(currentOutlineItem);
+      currentOutlineItem.dataset.level--;
+      currentOutlineItem.style.marginLeft = 50*currentOutlineItem.dataset.level+"px";
     } else {
       createNewOutlineItem(null, currentOutlineItem.dataset.level);
     }
@@ -79,30 +64,19 @@ function keyManager(event) {
     }
   } else if (event.keyCode === 9) { // tab pressed
     event.preventDefault();
-    if (event.shiftKey) {
-      decreaseLevel(currentOutlineItem);
+    if (event.shiftKey && currentOutlineItem.dataset.level > 0) {
+      currentOutlineItem.dataset.level--;
       // TODO: check child elements
-    } else {
-      increaseLevel(currentOutlineItem);
+    } else if (currentOutlineItem.dataset.level < 5) { // limited to 6 (H1-6)
+      currentOutlineItem.dataset.level++;
+      // TODO: check child elements
     }
+    currentOutlineItem.style.marginLeft = 50*currentOutlineItem.dataset.level+"px";
   }
 }
 
-function decreaseLevel(outlineItem) {
-  if (outlineItem.dataset.level > 0) {
-    outlineItem.dataset.level--;
-  }
-  outlineItem.style.marginLeft = 50*outlineItem.dataset.level+"px";
-}
-function increaseLevel(outlineItem) {
-  if (outlineItem.dataset.level < 5) { // limited to 6 (H1-6)
-    outlineItem.dataset.level++;
-  }
-  outlineItem.style.marginLeft = 50*outlineItem.dataset.level+"px";
-}
 // handles using the dropdown level selector
 function levelSelectorManager(event) {
-  let currentOutlineItem = getCurrentOutlineItem();
   if (currentOutlineItem) {
     currentOutlineItem.dataset.level = event.target.value;
     currentOutlineItem.style.marginLeft = 50*currentOutlineItem.dataset.level+"px";
@@ -114,10 +88,6 @@ document.getElementById('level-selector').addEventListener("change", levelSelect
 
 // inserts a new outline item under the currentOutlineItem
 function createNewOutlineItem(innerText, level) {
-  let currentOutlineItem = getCurrentOutlineItem();
-  if (!currentOutlineItem) {
-    currentOutlineItem = document.getElementById('outline-items').lastChild;
-  }
   let newOutlineItem = document.createElement("span");
   newOutlineItem.classList.add('outline-item');
   newOutlineItem.contentEditable = true;

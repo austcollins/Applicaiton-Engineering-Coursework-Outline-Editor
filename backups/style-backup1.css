@@ -63,7 +63,7 @@ body {
 .outline-item:focus {
   outline: none;
 }
-.outline-item.oi-selected {
+.outline-item.selected {
   border-bottom: 2px solid rgb(96,198,165);
   padding-bottom: 8px;
 }
