@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 // returns selected outline item, returns null if none selected
 function getCurrentOutlineItem() {
   let currentOutlineItems = document.getElementsByClassName('oi-selected');
@@ -6,33 +8,51 @@ function getCurrentOutlineItem() {
   if (currentOutlineItems.length === 1) {
     currentOutlineItem = currentOutlineItems[0];
   } else {
-    for (elem of document.getElementsByClassName('oi-selected')) {
+    // if two items selected somehow, deselect everything
+    for (let elem of document.getElementsByClassName('oi-selected')) {
       elem.classList.remove('oi-selected');
     }
   }
   return currentOutlineItem;
 }
 
-// Listen for clicks, if outline item is clicked, save reference to that item
+// Manages clicks on the page
 function selectorManager(event) {
-  // get the selected item
+  // unselect currentOutlineItem, ready to select a new one | unless user is selecting something in the toolbar
   let currentOutlineItem = getCurrentOutlineItem();
-  // Unselect currentOutline item if clicked elsewhere,
-  // unless selecting something in the toolbar
   if (currentOutlineItem && event.target.parentNode.id != "toolbar" && event.target.id != "toolbar") {
     currentOutlineItem.classList.remove('oi-selected');
     currentOutlineItem = '';
   }
-  // if an outline-item is selected, select it
+  // if a new outline-item is clicked, select it
   if (event.target.classList.contains('outline-item')) {
     currentOutlineItem = event.target;
     currentOutlineItem.classList.add('oi-selected');
-    currentOutlineItem.addEventListener("keydown", keyManager);
     // update toolbar settings to new item
-    document.getElementById("level-selector").value = currentOutlineItem.dataset.level;
+    updateSelector();
   }
 }
 document.addEventListener("click", selectorManager);
+// Can be called to update the selector
+function updateSelector() {
+  let currentOutlineItem = getCurrentOutlineItem();
+  document.getElementById("level-selector").value = currentOutlineItem.dataset.level;
+}
+
+function increaseLevelButtonPushed() {
+  let currentOutlineItem = getCurrentOutlineItem();
+  if (currentOutlineItem) {
+    increaseLevel(currentOutlineItem);
+    updateSelector();
+  }
+}
+function decreaseLevelButtonPushed() {
+  let currentOutlineItem = getCurrentOutlineItem();
+  if (currentOutlineItem) {
+    decreaseLevel(currentOutlineItem);
+    updateSelector();
+  }
+}
 
 // Clear the default outline item when first clicked
 document.getElementById('default').addEventListener("click", event => {
@@ -42,7 +62,9 @@ document.getElementById('default').addEventListener("click", event => {
 
 // handles what to do when a key is pressed while an outline-item is selected
 function keyManager(event) {
-  let currentOutlineItem = event.target;
+  let currentOutlineItem = getCurrentOutlineItem();
+  // if nothing selected, do nothing
+  if (!currentOutlineItem) return;
   // decide what to do when a key is pressed.
   if (event.keyCode === 13) { // enter pressed
     event.preventDefault();
@@ -85,8 +107,10 @@ function keyManager(event) {
     } else {
       increaseLevel(currentOutlineItem);
     }
+    updateSelector();
   }
 }
+document.addEventListener("keydown", keyManager);
 
 function decreaseLevel(outlineItem) {
   if (outlineItem.dataset.level > 0) {
@@ -140,7 +164,7 @@ function createNewOutlineItem(innerText, level) {
 // Dragging
 // -- oi acronym for outline item
 //
-var currentDraggingItem;
+let currentDraggingItem;
 function addOutlineDragEvents(outlineItem) {
   outlineItem.addEventListener("dragstart", outlineOnDragManager);
   outlineItem.addEventListener("dragover", outlineDragOverManager);
@@ -184,11 +208,75 @@ function outlineOnDropManager(event) {
 }
 function outlineDragEndManager(event) {
   // removes .oi-drag-target if the element is dropped or the drag is cancelled
-  for (elem of document.getElementsByClassName('oi-drag-target')) {
+  for (let elem of document.getElementsByClassName('oi-drag-target')) {
     elem.classList.remove('oi-drag-target');
   }
 }
 addOutlineDragEvents(document.getElementById('default'));
+
+//
+// Saving/Loading
+//
+function loadOutline() {
+  let saveName = "savedOutline";
+  let outlineJSON = localStorage.getItem(saveName);
+  if (outlineJSON) {
+    console.log(outlineJSON);
+    let outline = JSON.parse(outlineJSON);
+    console.log(outline);
+    if (outline.version === 1.0) {
+      for (var outlineItem of outline.outlineItems) {
+        createNewOutlineItem(outlineItem.content, outlineItem.level);
+      }
+      let defaultItem = document.getElementById('default');
+      defaultItem.parentNode.removeChild(defaultItem);
+      pushNotificaiton("Opened outline", "previous outline loaded...");
+    } else {
+      pushNotificaiton("Error", "Unable to load previous outline, saved from an old format.");
+    }
+  } else {
+    pushNotificaiton("Unable to load previous outline", "No outline found.");
+  }
+}
+
+function saveOutline() {
+  let outlineItems = document.getElementById('outline-items').children;
+  let saveName = "savedOutline";
+  let outline = {
+    name: saveName,
+    version: 1.0, // version of save format
+    outlineItems: []
+  };
+  for (let outlineItem of outlineItems) {
+    if (outlineItem.classList.contains('outline-item')) {
+      // needs fixing to save bold/underline/italic
+      outline.outlineItems.push({level: outlineItem.dataset.level, content: outlineItem.textContent});
+    }
+  }
+  let outlineJSON = JSON.stringify(outline);
+  pushNotificaiton("Saved", `All changes have been saved.`);
+  localStorage.setItem(saveName, outlineJSON);
+}
+
+//
+// Exporting
+//
+
+// runs when the user requests to export
+function startExport() {
+  // show export options
+}
+// export the outline as format (html|markup|plaintext)
+function exportOutline(format) {
+  if (format === "html") {
+
+  } else if (format === "markup") {
+
+  } else if (format === "plaintext") {
+
+  }
+}
+
 
 
 //
@@ -218,7 +306,7 @@ function pushNotificaiton(header, content, displayTime = 2000){
   setTimeout(function(n) {
     fadeDeleteElement(n);
   }, displayTime, notification);
-};
+}
 // function to animate an element sliding off the right of the page
 function fadeDeleteElement(element) {
   let fadeEffect = setInterval(function (element) {
@@ -232,21 +320,8 @@ function fadeDeleteElement(element) {
     }, 50, element);
 }
 
+//
+// HELP PAGE
+//
 
-
-// For testing purposes
-createNewOutlineItem("Cool Document by Ausin Collins", 0);
-createNewOutlineItem("Whats in this document?", 1);
-createNewOutlineItem("Cool things", 2);
-createNewOutlineItem("Things I think are cool but probably aren't.", 2);
-createNewOutlineItem("Reasons I think these things are cool", 3);
-createNewOutlineItem("What's not in this document?", 1);
-createNewOutlineItem("Things which aren't cool.", 2);
-createNewOutlineItem("Things you think are cool but aren't.", 2);
-createNewOutlineItem("Reasons they aren't cool.", 3);
-createNewOutlineItem("Even more reaons", 4);
-createNewOutlineItem("Anything useful.", 2);
-// Delete default item after loading as it is used as a reference
-let defaultItem = document.getElementById('default');
-defaultItem.parentNode.removeChild(defaultItem);
-pushNotificaiton("OutlineEditor", "Test outline loaded.");
+loadOutline();

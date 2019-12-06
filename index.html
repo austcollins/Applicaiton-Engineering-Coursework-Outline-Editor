@@ -13,7 +13,7 @@
         <button  style="font-style: italic;" onclick="document.execCommand('italic',false,null);" title="Italicize Highlighted Text">I</button>
         <button style="font-weight: bold;" onclick="document.execCommand( 'bold',false,null);" title="Bold Highlighted Text">B</button>
         <button style="text-decoration: underline;" onclick="document.execCommand( 'underline',false,null);">U</button>
-        <button onclick="decreaseLevel();">&larr;</button>
+        <button onclick="decreaseLevelButtonPushed();">&larr;</button>
         <select id="level-selector" name="level">
           <option value="0">Level 1</option>
           <option value="1">Level 2</option>
@@ -22,10 +22,10 @@
           <option value="4">Level 5</option>
           <option value="5">Level 6</option>
         </select>
-        <button onclick="increaseLevel();">&rarr;</button>
+        <button onclick="increaseLevelButtonPushed();">&rarr;</button>
         <span style="float: right;">
           <button type="button" name="open">Open</button>
-          <button type="button" name="save">Save</button>
+          <button type="button" onclick="saveOutline();" name="save">Save</button>
           <button type="button" name="export">Export</button>
         </span>
       </figure>
