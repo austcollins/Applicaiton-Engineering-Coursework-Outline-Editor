@@ -265,6 +265,10 @@ function saveOutline() {
 // runs when the user requests to export
 function startExport() {
   // show export options
+
+}
+function stopExport() {
+  // hide export options
 }
 // export the outline as format (html|markup|plaintext)
 function exportOutline(format) {
@@ -324,4 +328,7 @@ function fadeDeleteElement(element) {
 // HELP PAGE
 //
 
-loadOutline();
+function main() {
+
+}
+main();
