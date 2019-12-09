@@ -2,9 +2,8 @@
   "name": "applicaiton-engineering-coursework-outline-editor",
   "version": "1.0.0",
   "description": "A web application which allows quick outline editing for taking lecture notes/preparing documents.",
-  "main": "main.js",
   "scripts": {
-    "start": "node main.js"
+    "start": "node server"
   },
   "repository": {
     "type": "git",
