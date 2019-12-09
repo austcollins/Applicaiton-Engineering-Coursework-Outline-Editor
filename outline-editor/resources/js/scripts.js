@@ -17,7 +17,7 @@ function getCurrentOutlineItem() {
 }
 
 // Manages clicks on the page
-function selectorManager(event) {
+function clickManager(event) {
   // unselect currentOutlineItem, ready to select a new one | unless user is selecting something in the toolbar
   let currentOutlineItem = getCurrentOutlineItem();
   if (currentOutlineItem && event.target.parentNode.id != "toolbar" && event.target.id != "toolbar") {
@@ -32,11 +32,14 @@ function selectorManager(event) {
     updateSelector();
   }
 }
-document.addEventListener("click", selectorManager);
+document.addEventListener("click", clickManager);
+
 // Can be called to update the selector
 function updateSelector() {
   let currentOutlineItem = getCurrentOutlineItem();
-  document.getElementById("level-selector").value = currentOutlineItem.dataset.level;
+  if (currentOutlineItem) {
+    document.getElementById("level-selector").value = currentOutlineItem.dataset.level;
+  }
 }
 
 function increaseLevelButtonPushed() {

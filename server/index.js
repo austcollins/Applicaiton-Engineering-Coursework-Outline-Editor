@@ -1,5 +1,4 @@
 // A simple static server
-
 const http = require('http')
       fs = require('fs'),
       path = require('path');
