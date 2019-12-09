@@ -1,0 +1,19 @@
+{
+  "name": "applicaiton-engineering-coursework-outline-editor",
+  "version": "1.0.0",
+  "description": "A web application which allows quick outline editing for taking lecture notes/preparing documents.",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/austcollins/Applicaiton-Engineering-Coursework-Outline-Editor.git"
+  },
+  "author": "Austin Collins",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/austcollins/Applicaiton-Engineering-Coursework-Outline-Editor/issues"
+  },
+  "homepage": "https://github.com/austcollins/Applicaiton-Engineering-Coursework-Outline-Editor#readme"
+}
