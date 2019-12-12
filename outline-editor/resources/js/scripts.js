@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 // returns selected outline item, returns null if none selected
 function getCurrentOutlineItem() {
   let currentOutlineItems = document.getElementsByClassName('oi-selected');
@@ -21,7 +20,6 @@ function clickManager(event) {
   let currentOutlineItem = getCurrentOutlineItem();
   if (currentOutlineItem && event.target.parentNode.id != "toolbar" && event.target.id != "toolbar") {
     currentOutlineItem.classList.remove('oi-selected');
-    currentOutlineItem = '';
   }
   // if a new outline-item is clicked, select it
   if (event.target.classList.contains('outline-item')) {
@@ -142,12 +140,12 @@ function levelSelectorManager(event) {
 document.getElementById('level-selector').addEventListener("change", levelSelectorManager);
 
 // inserts a new outline item under the currentOutlineItem
-function createNewOutlineItem(innerText, level) {
+function createNewOutlineItem(innerHTML, level) {
   let currentOutlineItem = getCurrentOutlineItem();
   let newOutlineItem = document.createElement("span");
   newOutlineItem.classList.add('outline-item');
   newOutlineItem.contentEditable = true;
-  newOutlineItem.innerText = innerText;
+  newOutlineItem.innerHTML = innerHTML;
   newOutlineItem.dataset.level = level;
   newOutlineItem.style.marginLeft = 50*newOutlineItem.dataset.level+"px";
   newOutlineItem.draggable=true;
@@ -269,10 +267,20 @@ function getSavedOutlines() {
   return savedOutlines;
 }
 
-function saveOutline() {
+function saveOutline(notify = true) {
   let outlineItems = document.getElementById('outline-items').children;
+
+  // See what we're saving as
   let saveName = getLastOutlineName();
   if (!saveName) {saveName = "Untitled Outline"};
+  let typedName = document.getElementById('outline-title').innerText;
+  // check if the user has changed the name.
+  if (!(saveName === typedName)) {
+    localStorage.removeItem(saveName);
+    saveName = typedName;
+    setLastOutlineName(saveName);
+  }
+
   let outline = {
     name: saveName,
     version: 1.0, // version of save format
@@ -281,11 +289,13 @@ function saveOutline() {
   for (let outlineItem of outlineItems) {
     if (outlineItem.classList.contains('outline-item')) {
       // needs fixing to save bold/underline/italic
-      outline.outlineItems.push({level: outlineItem.dataset.level, content: outlineItem.textContent});
+      outline.outlineItems.push({level: outlineItem.dataset.level, content: outlineItem.innerHTML});
     }
   }
   let outlineJSON = JSON.stringify(outline);
-  pushNotificaiton("Saved", `All changes have been saved.`);
+  if (notify) {
+    pushNotificaiton("Saved", `All changes have been saved.`);
+  }
   localStorage.setItem(saveName, outlineJSON);
   setLastOutlineName(saveName);
 }
@@ -303,10 +313,6 @@ function getLastOutlineName() {
 }
 function setLastOutlineName(saveName) {
   localStorage.setItem("lastOutline", saveName);
-}
-function setOutlineName(newName) {
-  document.getElementById('outline-title').innerText = newName;
-  saveOutline();
 }
 
 // toggles the outline loader, and updates its contents
@@ -355,31 +361,6 @@ function outlineLoaderItemClicked(event) {
   }
 }
 
-
-
-//
-// Exporting
-//
-
-// runs when the user requests to export
-function startExport() {
-  // show export options
-
-}
-function stopExport() {
-  // hide export options
-}
-// export the outline as format (html|markup|plaintext)
-function exportOutline(format) {
-  if (format === "html") {
-
-  } else if (format === "markup") {
-
-  } else if (format === "plaintext") {
-
-  }
-}
-
 //
 // Notifications
 //
@@ -421,16 +402,9 @@ function fadeDeleteElement(element) {
     }, 50, element);
 }
 
-// for testing
-function deleteAllOutlines() {
-  let outlines = getSavedOutlines();
-  for (outline in outlines) {
-    localStorage.removeItem(outlines[outline]);
-  }
-}
-
 function main() {
 
+  // Load the users last state
   let lastOutline = getLastOutlineName();
   if (lastOutline) {
     loadOutline(lastOutline);
@@ -442,6 +416,11 @@ function main() {
       pushNotificaiton("New Outline", "No previous outline found");
     }
   }
+
+  // Auto save every 20 seconds mins
+  setInterval(function() {
+    saveOutline(false);
+  }, 20 * 1000);
 
 }
 main();

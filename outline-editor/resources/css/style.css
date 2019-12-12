@@ -95,3 +95,8 @@ body {
   background-color: rgb(62,176,131);
   color: #fff;
 }
+
+#footer-text, #footer-text a {
+  color: #5c5c5c;
+  text-align: center;
+}
