@@ -1,5 +1,4 @@
 /*jshint esversion: 6 */
-
 // returns selected outline item, returns null if none selected
 function getCurrentOutlineItem() {
   let currentOutlineItems = document.getElementsByClassName('oi-selected');
@@ -58,10 +57,13 @@ function decreaseLevelButtonPushed() {
 }
 
 // Clear the default outline item when first clicked
-document.getElementById('default').addEventListener("click", event => {
-  event.target.id = '';
-  event.target.innerText = '';
-}, { once: true });
+function setDefaultRemover() {
+  document.getElementById('default').addEventListener("click", event => {
+    event.target.id = '';
+    event.target.innerText = '';
+  }, { once: true });
+}
+setDefaultRemover();
 
 // handles what to do when a key is pressed while an outline-item is selected
 function keyManager(event) {
@@ -81,7 +83,7 @@ function keyManager(event) {
   } else if (event.keyCode === 8) { // backspace pressed
     // if empty and not the only outline item, delete it
     // holding the shift key allows you to delete even if full
-    if (!currentOutlineItem.innerText || event.shiftKey) {
+    if (currentOutlineItem.innerText == '' || event.shiftKey) {
       event.preventDefault();
       if (document.getElementsByClassName('outline-item').length > 1) {
         // Remove the outline item and move to the previous one
@@ -142,9 +144,6 @@ document.getElementById('level-selector').addEventListener("change", levelSelect
 // inserts a new outline item under the currentOutlineItem
 function createNewOutlineItem(innerText, level) {
   let currentOutlineItem = getCurrentOutlineItem();
-  if (!currentOutlineItem) {
-    currentOutlineItem = document.getElementById('outline-items').lastChild;
-  }
   let newOutlineItem = document.createElement("span");
   newOutlineItem.classList.add('outline-item');
   newOutlineItem.contentEditable = true;
@@ -154,7 +153,11 @@ function createNewOutlineItem(innerText, level) {
   newOutlineItem.draggable=true;
   addOutlineDragEvents(newOutlineItem);
   // insert newOutlineItem after currentOutlineItem
-  currentOutlineItem.parentNode.insertBefore(newOutlineItem, currentOutlineItem.nextSibling);
+  if (currentOutlineItem) {
+    currentOutlineItem.parentNode.insertBefore(newOutlineItem, currentOutlineItem.nextSibling);
+  } else {
+    document.getElementById('outline-items').appendChild(newOutlineItem);
+  }
 
   // move to new item now it has been created
   newOutlineItem.focus();
@@ -220,31 +223,56 @@ addOutlineDragEvents(document.getElementById('default'));
 //
 // Saving/Loading
 //
-function loadOutline() {
-  let saveName = "savedOutline";
+function newOutline() {
+  saveOutline();
+  let newOutlineName = "Untitled Outline";
+  let savedOutlines = getSavedOutlines();
+  let counter = 0;
+  while (savedOutlines.includes(newOutlineName)) {
+    counter++;
+    newOutlineName = "Untitled Outline " + counter;
+  }
+  let outlineContainer = document.getElementById('outline-items');
+  outlineContainer.innerHTML = '<p class="outline-item" id=default data-level="0" contentEditable=true draggable=true>Click here to get started...</p>';
+  setDefaultRemover();
+  setLastOutlineName(newOutlineName);
+  document.getElementById('outline-title').innerText = newOutlineName;
+  saveOutline();
+  hideOutlineLoader();
+}
+function loadOutline(saveName) {
   let outlineJSON = localStorage.getItem(saveName);
   if (outlineJSON) {
-    console.log(outlineJSON);
+    document.getElementById('outline-items').innerHTML = '';
     let outline = JSON.parse(outlineJSON);
-    console.log(outline);
-    if (outline.version === 1.0) {
-      for (var outlineItem of outline.outlineItems) {
-        createNewOutlineItem(outlineItem.content, outlineItem.level);
-      }
-      let defaultItem = document.getElementById('default');
-      defaultItem.parentNode.removeChild(defaultItem);
-      pushNotificaiton("Opened outline", "previous outline loaded...");
-    } else {
-      pushNotificaiton("Error", "Unable to load previous outline, saved from an old format.");
+    for (var outlineItem of outline.outlineItems) {
+      createNewOutlineItem(outlineItem.content, outlineItem.level);
     }
+    setLastOutlineName(saveName);
+    document.getElementById('outline-title').innerText = saveName;
+    pushNotificaiton("Opened outline", "outline loaded...");
   } else {
-    pushNotificaiton("Unable to load previous outline", "No outline found.");
+    pushNotificaiton("Unable to load outline", "Not found.");
   }
+  // make sure loader is hidden after an outline is loaded
+  hideOutlineLoader();
+}
+// returns an array with the keys of all the saved outlines
+function getSavedOutlines() {
+  let savedOutlines = [];
+  for (var i = 0; i < localStorage.length; i++){
+    let savedOutlineKey = localStorage.key(i);
+    if (savedOutlineKey != "lastOutline") {
+      savedOutlines.push(savedOutlineKey);
+    }
+  }
+  return savedOutlines;
 }
 
 function saveOutline() {
   let outlineItems = document.getElementById('outline-items').children;
-  let saveName = "savedOutline";
+  let saveName = getLastOutlineName();
+  if (!saveName) {saveName = "Untitled Outline"};
   let outline = {
     name: saveName,
     version: 1.0, // version of save format
@@ -259,7 +287,75 @@ function saveOutline() {
   let outlineJSON = JSON.stringify(outline);
   pushNotificaiton("Saved", `All changes have been saved.`);
   localStorage.setItem(saveName, outlineJSON);
+  setLastOutlineName(saveName);
 }
+function deleteOutline() {
+  let saveName = getLastOutlineName();
+  if (saveName) {
+    localStorage.removeItem(saveName);
+    localStorage.removeItem("lastOutline");
+  }
+  location.reload();
+}
+
+function getLastOutlineName() {
+  return localStorage.getItem("lastOutline");
+}
+function setLastOutlineName(saveName) {
+  localStorage.setItem("lastOutline", saveName);
+}
+function setOutlineName(newName) {
+  document.getElementById('outline-title').innerText = newName;
+  saveOutline();
+}
+
+// toggles the outline loader, and updates its contents
+function toggleOutlineLoader() {
+  // show the menu to choose a saved outline
+  let outlineLoader = document.getElementById("outline-loader");
+  if (outlineLoader.style.display == "none") {
+    let savedOutlines = getSavedOutlines();
+    if (savedOutlines.length > 0) {
+      outlineLoader.innerHTML = '';
+      for (let savedOutline in savedOutlines) {
+        if (savedOutlines[savedOutline] === "lastOutline") { continue; };
+        let saveName = savedOutlines[savedOutline];
+        let outlineLoaderItem = document.createElement("p");
+        outlineLoaderItem.classList.add('ol-item');
+        outlineLoaderItem.dataset.saveName = saveName;
+        if (saveName === getLastOutlineName()) {
+          // tell the user it's aready open
+          outlineLoaderItem.classList.add('ol-open');
+        } else {
+          // only clickable if not currently open
+          outlineLoaderItem.addEventListener("click",outlineLoaderItemClicked);
+        }
+        outlineLoaderItem.innerText = saveName;
+        outlineLoader.appendChild(outlineLoaderItem);
+      }
+    } else {
+      outlineLoader.innerHTML = "<p>No saved outlines</p>"
+    }
+    outlineLoader.style.display = "block";
+  } else {
+    outlineLoader.style.display = "none";
+  }
+}
+function hideOutlineLoader() {
+  let outlineLoader = document.getElementById("outline-loader");
+  outlineLoader.style.display = "none";
+}
+
+function outlineLoaderItemClicked(event) {
+  let chosenOutline = event.target.dataset.saveName;
+  if (chosenOutline) {
+    saveOutline();
+    loadOutline(chosenOutline);
+    toggleOutlineLoader();
+  }
+}
+
+
 
 //
 // Exporting
@@ -283,8 +379,6 @@ function exportOutline(format) {
 
   }
 }
-
-
 
 //
 // Notifications
@@ -314,7 +408,7 @@ function pushNotificaiton(header, content, displayTime = 2000){
     fadeDeleteElement(n);
   }, displayTime, notification);
 }
-// function to animate an element sliding off the right of the page
+// function to fade element out before deleting it
 function fadeDeleteElement(element) {
   let fadeEffect = setInterval(function (element) {
         if (!element.style.opacity) { element.style.opacity = 1; }
@@ -327,11 +421,27 @@ function fadeDeleteElement(element) {
     }, 50, element);
 }
 
-//
-// HELP PAGE
-//
+// for testing
+function deleteAllOutlines() {
+  let outlines = getSavedOutlines();
+  for (outline in outlines) {
+    localStorage.removeItem(outlines[outline]);
+  }
+}
 
 function main() {
+
+  let lastOutline = getLastOutlineName();
+  if (lastOutline) {
+    loadOutline(lastOutline);
+  } else {
+    let savedOutlines = getSavedOutlines();
+    if (savedOutlines.length > 0) {
+      loadOutline(savedOutlines[0]);
+    } else {
+      pushNotificaiton("New Outline", "No previous outline found");
+    }
+  }
 
 }
 main();
