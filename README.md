@@ -2,7 +2,7 @@
 AppEng Coursework (2019): A web application which allows quick outline editing for taking lecture notes/preparing documents.
 
 ## How to use the application
-The application is designed to be as intuative as possible, but there are some simple key commands for shortcuts/advanced users.
+The application is designed to be as intuitive as possible, but there are some simple key commands for shortcuts/advanced users.
 
 ### Getting started
 1. When you first load the application a blank outline will load called 'Untitled Outline'.
