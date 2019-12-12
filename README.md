@@ -7,7 +7,7 @@ The application is designed to be as intuitive as possible, but there are some s
 ### Getting started
 1. When you first load the application a blank outline will load called 'Untitled Outline'.
 2. You can click the title to change it.
-2. Click the default outline item to select it, as indicated on the page.
+2. Click the default header to select it, as indicated on the page.
 3. Enter your first header.
 
 #### Creating a new header
