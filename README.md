@@ -7,13 +7,13 @@ The application is designed to be as intuitive as possible, but there are some s
 ### Getting started
 1. When you first load the application a blank outline will load called 'Untitled Outline'.
 2. You can click the title to change it.
-2. Click the default header to select it, as indicated on the page.
+2. Then click the default header to select it, as indicated on the page.
 3. Enter your first header.
 
 #### Creating a new header
 Press <kbd>ENTER</kbd> to create a new header below the one currently selected.
 
-If you do this and the header you have selected is empty it will move the current header down a level. This is designed to be like creting lists in Word or Google Forms. If you want to leave an empty header simply hold <kbd>TAB</kbd> and press <kbd>ENTER</kbd> to stay on the same level.
+If you do this and the header you have selected is empty it will move the current header down a level. This is designed to be like creating lists in Word or Google Forms. If you want to leave an empty header simply hold <kbd>TAB</kbd> and press <kbd>ENTER</kbd> to stay on the same level.
 
 #### Moving up and down levels
 There are two ways to move up and down levels:
@@ -30,7 +30,7 @@ There are two ways to move up and down levels:
 1. You can move a header by dragging it with the green arrow.
 2. As you drag the header, a space will open to indicate where you are about to drop it.
 3. Drop the header when a space opens up to move it.
-4. To cancel the drag just drag it to a place it cannot be dropped.
+4. To cancel the drag just drag it to a place where it cannot be dropped.
 
 #### Deleting a header
 A header will be deleted if it has no content and the <kbd>BACKSPACE</kbd> key is pressed.
@@ -41,18 +41,18 @@ Pressing <kbd>SHIFT</kbd> + <kbd>BACKSPACE</kbd> will delete the header even if 
 The text within your header can be styled using Bold, Italic, or Underline.
 
 To do this:
-1. Select the heder
-2. Highlight the text you want to style
+1. Select the header.
+2. Highlight the text you want to style.
 3. Use the <kbd>B</kbd>, <kbd>U</kbd>, <kbd>I</kbd> buttons in the toolbar to apply/remove styles.
 
 ### Saving and Opening outlines
-To save your outline click <kbd>Save</kbd> button, a notificaiton will confirm if this was successful.
+To save your outline click the <kbd>Save</kbd> button, a notificaiton will confirm if this was successful.
 
 When you visit the applicaiton it will open your last edited outline, if one is saved. To open a different outline, click the open button and select the outline you wish to edit from the menu.
 
 ### Deleting an outline
 To delete an outline:
 1. Open the outline you wish to delete.
-2. Click the delete button.
-A notification will confirm the outline was deleted. The screen will automatically load another saved outline, if no other outlines are saved a new outline will be loaded.
+2. Click the <kbd>Delete</kbd> button.
+A notification will confirm the outline was deleted. The application will automatically load another saved outline, or if no other outlines are saved a new outline will be loaded.
 
