@@ -56,3 +56,18 @@ To delete an outline:
 2. Click the <kbd>Delete</kbd> button.
 A notification will confirm the outline was deleted. The application will automatically load another saved outline, or if no other outlines are saved a new outline will be loaded.
 
+
+
+## Unfinished and future work
+Below are some features I did not have time to implement into the application.
+
+### Saving and Loading saved outlines to the users computer.
+- The ability to export one or all of the saved outlines as JSON files so they can store them on a USB/Computer.
+- The ability to open an outline from the users computer.
+- The ability to drag a save file to the screen and open it.
+
+### Exporting and Importing outlines to different formats.
+- Using the current JSON save format as an intermediate, I wanted to create functions which could convert to and from different formats.
+- This would mean the user could import a Markdown file, edit the contextual points and export as a word/html file if they wish.
+
+
