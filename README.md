@@ -48,6 +48,8 @@ To do this:
 ### Saving and Opening outlines
 To save your outline click the <kbd>Save</kbd> button, a notificaiton will confirm if this was successful.
 
+Your outline will automatically save every 20 seconds, however remember to click save before exiting the applicaiton.
+
 When you visit the applicaiton it will open your last edited outline, if one is saved. To open a different outline, click the open button and select the outline you wish to edit from the menu.
 
 ### Deleting an outline
