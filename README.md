@@ -5,8 +5,10 @@ AppEng Coursework (2019): A web application which allows quick outline editing f
 The application is designed to be as intuative as possible, but there are some simple key commands for shortcuts/advanced users.
 
 ### Getting started
-1. Click the default outline item to select it, as indicated on the page.
-2. Enter your first title.
+1. When you first load the application a blank outline will load called 'Untitled Outline'.
+2. You can click the title to change it.
+2. Click the default outline item to select it, as indicated on the page.
+3. Enter your first header.
 
 #### Creating a new outline item
 Press <kbd>ENTER</kbd> to create a new outline item below the one currently selected.
@@ -20,8 +22,14 @@ There are two ways to move up and down levels:
 - The toolbar
   1. Select the item you want to move.
   2. Select the desired level from the dropdown in the toolbar.
-  3. Use the arrows in the toolbar to step between levels.
-Moving an item between levels will also increase/decrease the levels of any child items.
+  3. Or use the arrows in the toolbar to step between levels.
+  
+#### Moving an outline item
+1. You can move an outline item by dragging it with the green arrow.
+2. As you drag the item, a space will open to indicate where you are about to drop it.
+3. Drop the item when a space opens up to move the item.
+4. To cancel the drag just drag it to a place it cannot be dropped.
+
 
 #### Deleting an outline item
 An outline item will be deleted if it has no content and the <kbd>BACKSPACE</kbd> key is pressed.
@@ -37,9 +45,13 @@ To do this:
 3. Use the <kbd>B</kbd>, <kbd>U</kbd>, <kbd>I</kbd> buttons in the toolbar to apply/remove styles.
 
 ### Saving and Opening outlines
+To save your outline click <kbd>Save</kbd> button, a notificaiton will confirm if this was successful.
 
-Your outline will automatically save in the background, when this was last done should be indidcated at the bottom of the page. Alternatively, you can click the <kbd>Save</kbd> button to save the outline now.
+When you visit the applicaiton it will open your last edited outline, if one is saved. To open a different outline, click the open button and select the outline you wish to edit from the menu.
 
-When you visit the applicaiton it will open your last edited outline, if one is saved. To open a different outline, click the open button and select the outline you wish to edit from the pop-up menu.
-
+### Deleting an outline
+To delete an outline:
+1. Open the outline you wish to delete.
+2. Click the delete button.
+A notification will confirm the outline was deleted. The screen will automatically load another saved outline, if no other outlines are saved a new outline will be loaded.
 
