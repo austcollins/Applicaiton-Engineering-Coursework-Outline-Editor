@@ -13,6 +13,8 @@ The application is designed to be as intuitive as possible, but there are some s
 #### Creating a new header
 Press <kbd>ENTER</kbd> to create a new header below the one currently selected.
 
+If you do this and the header you have selected is empty it will move the current header down a level. This is designed to be like creting lists in Word or Google Forms. If you want to leave an empty header simply hold <kbd>TAB</kbd> and press <kbd>ENTER</kbd> to stay on the same level.
+
 #### Moving up and down levels
 There are two ways to move up and down levels:
 - Keyboard shortcuts
