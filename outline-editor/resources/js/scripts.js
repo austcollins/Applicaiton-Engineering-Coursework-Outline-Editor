@@ -402,7 +402,7 @@ function pushNotificaiton(header, content, displayTime = 2000){
   contentElem.classList.add('content');
   contentElem.innerText = content;
   notification.appendChild(contentElem);
-  document.getElementById('notifications').appendChild(notification);
+  document.getElementById('notifications').prepend(notification);
   // manage timeout
   setTimeout(function(n) {
     fadeDeleteElement(n);
