@@ -10,8 +10,8 @@ The application is designed to be as intuitive as possible, but there are some s
 2. Click the default outline item to select it, as indicated on the page.
 3. Enter your first header.
 
-#### Creating a new outline item
-Press <kbd>ENTER</kbd> to create a new outline item below the one currently selected.
+#### Creating a new header
+Press <kbd>ENTER</kbd> to create a new header below the one currently selected.
 
 #### Moving up and down levels
 There are two ways to move up and down levels:
@@ -24,23 +24,22 @@ There are two ways to move up and down levels:
   2. Select the desired level from the dropdown in the toolbar.
   3. Or use the arrows in the toolbar to step between levels.
   
-#### Moving an outline item
-1. You can move an outline item by dragging it with the green arrow.
-2. As you drag the item, a space will open to indicate where you are about to drop it.
-3. Drop the item when a space opens up to move the item.
+#### Moving a header
+1. You can move a header by dragging it with the green arrow.
+2. As you drag the header, a space will open to indicate where you are about to drop it.
+3. Drop the header when a space opens up to move it.
 4. To cancel the drag just drag it to a place it cannot be dropped.
 
+#### Deleting a header
+A header will be deleted if it has no content and the <kbd>BACKSPACE</kbd> key is pressed.
 
-#### Deleting an outline item
-An outline item will be deleted if it has no content and the <kbd>BACKSPACE</kbd> key is pressed.
-
-Pressing <kbd>SHIFT</kbd> + <kbd>BACKSPACE</kbd> will delete the item even if it has content.
+Pressing <kbd>SHIFT</kbd> + <kbd>BACKSPACE</kbd> will delete the header even if it has content.
 
 #### Rich text editing
-The text within your outline item can be styled using Bold, Italic, or Underline.
+The text within your header can be styled using Bold, Italic, or Underline.
 
 To do this:
-1. Select the outline item
+1. Select the heder
 2. Highlight the text you want to style
 3. Use the <kbd>B</kbd>, <kbd>U</kbd>, <kbd>I</kbd> buttons in the toolbar to apply/remove styles.
 
